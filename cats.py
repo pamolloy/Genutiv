@@ -12,7 +12,7 @@ import json
 
 print "Downloading list..."
 
-## Should I login? Add interface to login?
+# TODO(PM) Add an interface to login to de.wiktionary.org
 site = wikitools.wiki.Wiki('http://de.wiktionary.org/w/api.php')
 category = wikitools.category.Category(site, title='Substantiv (Deutsch)')
 
@@ -20,10 +20,10 @@ noun_list = category.getAllMembers(titleonly = True)
 
 print "Processing list..."
 
+# Remove colons, dashes and digits from category output
 regex = re.compile('[:|-|0-9]')
 clean_list = [noun for noun in noun_list if not regex.search(noun)]
 
-## Store data in file using pickle
-## store object to be processed by nget.py 
-with open('nouns.json', 'wb') as store:
+# Store object in JSON file to be processed by nget.py
+with open('nouns.json', 'w') as store:
     json.dump(clean_list, store)
