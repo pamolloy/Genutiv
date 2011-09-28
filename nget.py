@@ -17,31 +17,37 @@ from __future__ import print_function
 import urllib2
 import re
 import json
-import logging
+#import logging
 from BeautifulSoup import BeautifulSoup
 
-logging.basicConfig(level=logging.DEBUG)
-LOG = logging.getLogger(__name__)
+#logging.basicConfig(level=logging.DEBUG)
+#LOG = logging.getLogger(__name__)
 
-user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.30 Chrome/12.0.742.112 Safari/534.30'
+user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.30\
+ Chrome/12.0.742.112 Safari/534.30'
 startline = re.compile('\s\(grammatikal..*')
 endline = re.compile('Genus:\s')
+url_space = re.compile(' ')
 noun_gender = {}
 
 def url_list():
+    '''Create a dictionary of nouns from cats.py and corresponding urls.'''
     with open('nouns.json') as raw_nouns:
-        noun_list = json.load(raw_nouns) #Create a list of nouns from output of cats.py
+        noun_list = json.load(raw_nouns)
 
     urlz = {}
 
     for noun in noun_list:
-        url = u'http://de.wiktionary.org/wiki/{}'.format(noun)
+        url_noun = url_space.sub('_', noun)
+        url_noun = url_noun.encode('utf-8')
+        url = 'http://de.wiktionary.org/wiki/{}'.format(url_noun)
         urlz[noun] = url
     return urlz
 
 def load_page(url):
-    """For each URL in the given list: download the page, read it and split into lines."""
-    print(u'Checking: {}'.format(url))
+    """For each URL in the given list: download the page, read it and split 
+    into lines."""
+    print('Checking: {}'.format(url))
     request = urllib2.Request(url, headers = { 'User-Agent' : user_agent })
     raw_html = urllib2.urlopen(request)
     clean_html = raw_html.read()
@@ -57,18 +63,18 @@ def search_gender(page, noun):
         attr_gender = startline.sub('', attr_gender)
         gender = endline.sub('', attr_gender)
         noun_gender[noun] = gender #Will this reference the global variable?
-        print(u'Found gender: {}'.format(gender)) #How do I reference the noun variable here?
+        print(u'Found gender: {}'.format(gender))
         break
 
 urlz = url_list()
-count = 0
+#count = 0
 for noun in urlz:
-    count += 1
+#    count += 1
     url = urlz[noun]
     clean_html = load_page(url)
     search_gender(clean_html, noun)
-    if count > 10:
-        break
+#    if count > 10:
+#        break
 
 with open('gender.json', 'wb') as store:
     json.dump(noun_gender, store)
