@@ -1,4 +1,5 @@
 #!/usr/bin/python2
+# -*- coding: utf-8 -*-
 #
 #   art.py
 # 
@@ -11,6 +12,7 @@
 #          what circumstances?
 #       - How many nouns don't match a pattern, and what nouns are they?
 #       - Can I factor out the for loops into a more generic function?
+#       - What is the total break down of the genders?
 
 #   Masculine
 #       - Nouns ending in the suffixes -ig, -ling, -or, -us
@@ -19,11 +21,11 @@
 #       - Words designating professions and nationalities, using the suffix -in
 #          with masculine forms
 #       - Nouns ending in the suffixes -anz, -ei, -enz, -ie, -ik, -ion, -heit,
-#          -keit, -schaft, -tät, -ung, -ur, with exceptions (e.g. die Papagei)
+#          -keit, -schaft, -taet, -ung, -ur, with exceptions (e.g. die Papagei)
 #       - Most nouns ending in -e (plural -n)
 #   Neuter
 #       - Nouns ending in the suffix -tum (e.g. Christentum, Judentum, 
-#          Eigentum), with exceptions (e.g. der Reichtum, der Irrtum)
+#          Eigentui), with exceptions (e.g. der Reichtum, der Irrtum)
 #       - Diminutive suffixes -chen, -lein (and their dialect variations -erl,
 #          -el, -le, -li)
 #       - Nouns with the suffixes -ment, -(i)um
@@ -33,11 +35,14 @@ from __future__ import print_function
 import json
 import re
 
-pattern_dict = {'Maskulinum': ['ig$', 'ling$', 'or$', 'us$', 'en$'],
+pattern_dict = {'Maskulinum': ['ig$', 'ling$', 'or$', 'us$', 'en$', 'el$',
+ 'ant$', 'all$', 'und$', 'ang$', 'aum$', 'ich$', 'ismus$', 'er$', 'ner$',
+ 'ist$'],
  'Femininum': ['in$', 'erin$', 'anz$', 'ei$', 'enz$', 'ie$', 'ik$', 'ion$',
- 'heit$', 'keit$', 'schaft$', 'ung$', 'ur$', 'e$'],
+ 'heit$', 'keit$', 'schaft$', 'ung$', 'ur$', 'e$', u'tät$', 'ade$', 'age$',
+ 'ette$', 'ine$', 'tur$', 'isse$', 'itis$', 'ive$', 't$'],
  'Neutrum': ['tum$', 'chen$', 'lein$', 'erl$', 'el$', 'le$', 'li$', 'ment$',
- 'ium$', 'um$', '^Ge']}
+ 'ium$', 'um$', '^Ge', 'o$', 'om$', 'em$', 'ett$', 'ma$', 'nis$', 'tel$']}
 
 # Load noun:gender dictionary
 with open('gender.json') as gender_file:
@@ -106,7 +111,7 @@ def results(compare_dict):
                 other += 1
         
         accuracy = round((float(correct) / float(total)) * 100, 2)
-        print('"{0}": {1}% for {2} nouns'.format(pattern, accuracy, total))
+        print(repr(pattern).rjust(10), repr(accuracy).rjust(8), repr(correct).rjust(5), repr(wrong).rjust(5))
 
     # Any exceptions to a pattern
     # Nouns correctly matched by pattern
