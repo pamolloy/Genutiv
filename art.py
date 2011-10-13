@@ -4,7 +4,7 @@
 #   art.py
 #
 #   PURPOSE: 
-#   Create a data structure with nouns matched to patterns and access whether
+#   Create a data structure with nouns matched to patterns and assess whether
 #   pattern could accurately guess gender of each matched noun.
 #
 #   TODO:
@@ -14,7 +14,6 @@
 #   - Can I factor out the for loops into a more generic function?
 #
 
-from __future__ import print_function
 import json
 import re
 

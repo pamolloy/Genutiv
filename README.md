@@ -14,7 +14,6 @@ The decisions behind how the scripts function is explained in the *[Genutiv](htt
 A general list of modifications to be made to more than one file. Edits to individual files are contained in the commented header of each file.
 
 ### Code ###
-*   Convert Python version 3 print functions to version 2 statements
 *   Add progress output for slow functions
 
 ### Grammar ###

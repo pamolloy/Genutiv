@@ -18,7 +18,6 @@
 #   - Store pertinent information (e.g. date, time, source)
 #
 
-from __future__ import print_function
 import urllib2
 import re
 import json
@@ -47,7 +46,7 @@ def url_list():
 def load_page(url):
     """For each URL in the given list: download the page, read it and split 
     into lines."""
-    print('Checking: {}'.format(url))
+    print 'Checking: {}'.format(url)
     request = urllib2.Request(url, headers = { 'User-Agent' : user_agent })
     raw_html = urllib2.urlopen(request)
     clean_html = raw_html.read()
@@ -63,7 +62,7 @@ def search_gender(page, noun):
         attr_gender = startline.sub('', attr_gender)
         gender = endline.sub('', attr_gender)
         noun_gender[noun] = gender #Will this reference the global variable?
-        print(u'Found gender: {}'.format(gender))
+        print u'Found gender: {}'.format(gender)
         break
 
 urlz = url_list()
