@@ -15,6 +15,8 @@ A general list of modifications to be made to more than one file. Edits to indiv
 
 ### Code ###
 *   Add progress output for slow functions
+*   Organize file by creating a hierarchy. For example, place all JSON files in a single directory.
+*   Save all data structures with utf-8 encoding using json.dump with *ensure_ascii* set to **False**.
 
 ### Grammar ###
 *   Foreign proper nouns may be removed from the collection of nouns to be analyzed
