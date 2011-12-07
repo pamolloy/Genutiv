@@ -26,7 +26,7 @@ with open('example.json') as raw:
 
 with codecs.open('table.txt', encoding='utf-8', mode='w+') as table_file:
 
-class Pages:
+class Pages(object):
     """Create a page for each pattern containing exception and example 
     nouns."""
 
@@ -47,7 +47,8 @@ class Pages:
             correct = list_nouns(pattern, 'Correct')
             wrong = list_nouns(pattern, 'Wrong')
             
-            post.write(u'---\nlayout: post\ntitle: {0}\npermalink: genutiv/{0}\n---\n'.format(pattern_file))
+            post.write(u'---\nlayout: post\ntitle: {0}\n
+                permalink: genutiv/{0}\n---\n'.format(pattern_file))
             post.write('## Examples ## {#examples}\n')
             for noun in correct:
                 post.write(noun + ' ')
@@ -67,7 +68,7 @@ class Pages:
         
         return verity_list
 
-class PrintTables:
+class PrintTables(object):
     
     def __init__(self):
     
@@ -156,7 +157,9 @@ class PrintTables:
         else:
             noun = exception.split(' ')
             noun = noun[1]
-            exception = u'[{}](http://www.dict.cc/?s={})'.format(exception, noun)
+            exception = u'[{}](http://www.dict.cc/?s={})'.format(
+                exception, noun
+                )
         
         return exception
         

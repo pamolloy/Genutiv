@@ -13,13 +13,14 @@
 #   e.g. list=categorymembers from http://en.wikipedia.org/w/api.php
 #
 #   TODO:
-#   - Store date and time with data
 #   - Only load necessary data from web page
 #   - Compare to other crawling programs
 #   - Patterns on page have relatively consistent line number
 #   - Backup data structure while crawling
 #   - Store pertinent information (e.g. date, time, source)
 #   - Filter out Kategorie:Fremdwort
+#   - Use MediaWiki API prop module to find relevant templates (i.e. {{m}},
+#      {{f}}, {{n}})
 #
 
 import urllib2
@@ -28,7 +29,7 @@ import re
 import json
 from BeautifulSoup import BeautifulSoup
 
-class WikiNounList:
+class WikiNounList(object):
     """Create a list of nouns and filter false items."""
     
     def __init__(sef, username, password):
@@ -81,7 +82,7 @@ class WikiNounList:
         with open('dirty.json', 'w') as store:
             json.dump(dirty, store)
 
-class WikiGender:
+class WikiGender(object):
     user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.30\
      Chrome/12.0.742.112 Safari/534.30'
     
