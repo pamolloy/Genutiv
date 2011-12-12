@@ -14,13 +14,12 @@
 #
 #   TODO:
 #   - Only load necessary data from web page
-#   - Compare to other crawling programs
-#   - Patterns on page have relatively consistent line number
-#   - Backup data structure while crawling
+#   - Backup data structure while loading
 #   - Store pertinent information (e.g. date, time, source)
 #   - Filter out Kategorie:Fremdwort
 #   - Use MediaWiki API prop module to find relevant templates (i.e. {{m}},
 #      {{f}}, {{n}})
+#   - Get information for filtering from links on each page.
 #
 
 import urllib2
@@ -29,109 +28,91 @@ import re
 import json
 from BeautifulSoup import BeautifulSoup
 
+
 class WikiNounList(object):
     """Create a list of nouns and filter false items."""
-    
-    def __init__(sef, username, password):
-        self.clean = []
-        self.dirty = []
-        self.user = username
-        self.word = password
-    
-    def titles(self, user, word):
+
+    def __init__(self, url='http://de.wiktionary.org/w/api.php'):
+        self.site = wikitools.wiki.Wiki(url) # TODO(PM) Add an interface to login to de.wiktionary.org
+        self.nouns = {}
+        with open('kategorien.json', 'r') as store:
+            self.kategorien = json.dump(store)
+
+    def fetch(self):
         """Download list of Wiktionary category members."""
+
+        for kategorie in self.kategorien:
+            category = wikitools.category.Category(self.site, title=kategorie)
+            print 'Finding members of: {}'.format(kategorie)
+            members = category.getAllMembers(titleonly=True) #TODO(PM) Create instance that returns a dictionary
+            self.kategorien[kategorie] = members
+
+        with open('full.json', 'wb') as store:
+            json.dump(self.kategorien, store)
+
+    def compare(self):
+        """Remove elements of other categories from Substantiv (deutsch)"""
+
+        with open('full.json', 'r') as store:
+            kategorien = json.load(store)
+
+        primary = kategorien['Substantiv (Deutsch)']
+        primary = set(primary)
+        del kategorien['Substantiv (Deutsch)']
+
+        # TODO(PM) The toponym 'Kabul' was not filtered
+        for category in kategorien:
+            junk = set(kategorien[category])
+            primary = primary - junk
+
+        primary = list(primary) # JSON can not serialize 'set' objects
         
-        # TODO(PM) Add an interface to login to de.wiktionary.org
-        url = 'http://de.wiktionary.org/w/api.php'
-        kategories = {
-            'Deutsch':[], 
-            'Substantiv':[], 
-            'Eigenname (Deutsch)':[], # Subcategory of "Substantiv (Deutsch)"
-            'Nachname (Deutsch)':[], # Subcategory of "Substantiv (Deutsch)"
-            'Substantiv (Deutsch)':[], 
-            'Substantiv (Althochdeutsch)':[], 
-            'Substantiv (Mittelhochdeutsch)':[], 
-            'Substantiv (Plattdetusch)':[], 
-            'Fremdwort':[]
-        }
-        site = wikitools.wiki.Wiki(url, username=user, password=word)
-        for kategorie in kategories:
-            category = wikitools.category.Category(site, title=kategorie)
-            kategories[kategorie] = category.getAllMembers(titleonly=True)
-        return kategories
-    
-    def links():
-        """Get information for filtering from links on each page."""
+        primary = self.filter(primary)
+        primary = self.gender(primary)
         
-        pass
-    
-    def filter(self, kategories):
+        with open('primary.json', 'wb') as store:
+            json.dump(primary, store)
+
+    def filter(self, nouns):
         """Remove list items that are not nouns."""
-        
-        # Remove colons, dashes, digits and spaces from category output
+
+        clean = {}
+        dirty = []
         regex = re.compile('[:|-|0-9]|\s')
-        clean = [noun for noun in noun_list if not regex.search(noun) else dirty.append[noun] ]
-    
-    def save(self):
-        """Save filtered nouns to JSON file and valid nouns to temporary 
-        file."""
-        
-        with open('clean.json', 'w') as store:
-            json.dump(clean, store)
-        
-        with open('dirty.json', 'w') as store:
-            json.dump(dirty, store)
 
-class WikiGender(object):
-    user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.30\
-     Chrome/12.0.742.112 Safari/534.30'
-    
-    startline = re.compile('\s\(grammatikal..*')
-    endline = re.compile('Genus:\s')
-    url_space = re.compile(' ')
-    
-    noun_gender = {}
-    
-    def url_list():
-        """Create a dictionary of nouns from cats.py and corresponding urls."""
-        with open('nouns.json') as raw_nouns:
-            noun_list = json.load(raw_nouns)
+        # Remove colons, dashes, digits and spaces from category output
+        for noun in nouns:
+            if not regex.search(noun):
+                clean[noun] = ''
+            else:
+                dirty.append(noun)
+        #clean = [noun if not regex.search(noun) else dirty.append[noun] for noun in nouns]
 
-        urlz = {}
+        return clean
 
-        for noun in noun_list:
-            url_noun = url_space.sub('_', noun)
-            url = 'http://de.wiktionary.org/wiki/{}'.format(url_noun)
-            urlz[noun] = url
-        return urlz
+    def gender(self, nouns):
+        """Use MediaWiki API prop module to find relevant gender templates and
+         assign gender to corresponding value"""
 
-    def load_page(url):
-        """For each URL in the given list: download the page, read it and split 
-        into lines."""
-        print 'Checking: {}'.format(url)
-        request = urllib2.Request(url, headers = { 'User-Agent' : user_agent })
-        raw_html = urllib2.urlopen(request)
-        clean_html = raw_html.read()
-        return clean_html
+        for noun in nouns:
+            page = wikitools.page.Page(self.site, title=noun)
+            templates = page.getTemplates()
 
-    def search_gender(page, noun):
-        """Use a regular expression on each line of web page until gender is found."""
-        soup = BeautifulSoup(page)
-        for em in soup.findAll('em'):
-            if 'Genus:' not in em['title']:
-                continue
-            attr_gender = em['title']
-            attr_gender = startline.sub('', attr_gender)
-            gender = endline.sub('', attr_gender)
-            noun_gender[noun] = gender #Will this reference the global variable?
-            print u'Found gender: {}'.format(gender)
-            break
+            for template in templates: #TODO(PM) Account for {{mf}}
+                if template == u'Vorlage:f':
+                    nouns[page.title] = "Femininum"
+                    break
+                elif template == u'Vorlage:m':
+                    nouns[page.title] = "Maskulinum"
+                    break
+                elif template == u'Vorlage:n':
+                    nouns[page.title] = "Neutrum"
+                    break
 
-urlz = url_list()
-for noun in urlz:
-    url = urlz[noun]
-    clean_html = load_page(url)
-    search_gender(clean_html, noun)
+        return nouns
 
-with open('gender.json', 'wb') as store:
-    json.dump(noun_gender, store)
+edwin = WikiNounList()
+edwin.compare()
+
+#with open('gender-new.json', 'w') as store:
+#    json.dump(noun_gender, store)
