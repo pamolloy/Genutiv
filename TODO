@@ -1,0 +1,8 @@
+TODO
+
+- Accelerate extraction of noun gender by only loading necessary data from page
+- Backup Reference data structure containing Noun instances while running
+- Store pertinent information (e.g. date, time, source)
+- Add a text interface to login to de.wiktionary.org
+- Text output for results of pattern analysis
+
