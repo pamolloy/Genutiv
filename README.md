@@ -10,15 +10,7 @@ For further information about collections of German nouns and grammatical caveat
 
 The decisions behind how the scripts function is explained in the *[Genutiv](http://pamolloy.dyndns.org/project/genutiv/)* article.
 
-## TODO ##
-A general list of modifications to be made to more than one file. Edits to individual files are contained in the commented header of each file.
-
-### Code ###
-*   Add progress output for slow functions
-*   Organize file by creating a hierarchy. For example, place all JSON files in a single directory.
-*   Save all data structures with utf-8 encoding using json.dump with *ensure_ascii* set to **False**.
-
-### Grammar ###
+### Grammatical improvements ###
 *   Foreign proper nouns may be removed from the collection of nouns to be analyzed
 *   The gender and plural ending of compound nouns are governed by the last word in the compound. Therefore it is not necessary to learn the gender of a compound noun and compound nouns should be removed from analysis. For more information see [German Compound Words](http://german.about.com/od/nounsandcases/a/German-Compound-Words.html)
 *   Some German nouns have a different meaning depending on the gender (e.g. [Band](http://www.dict.cc/?s=Band)
