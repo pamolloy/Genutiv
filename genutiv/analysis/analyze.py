@@ -7,8 +7,7 @@
 #   Create a data structure with nouns matched to patterns and access whether
 #   pattern could accurately guess gender of each matched noun.
 #
-#   TODO:
-#   - Test the percent accuracy of each default pattern.
+#   TODO(PM) Test the percent accuracy of each default pattern.
 #
 
 import json

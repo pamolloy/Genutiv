@@ -13,8 +13,8 @@ setup(
     download_url = "http://github.com/pamolloy/Genutiv",
     author = "Philip Molloy",
     author_email = "philip.a.molloy+genutiv@gmail.com",
-    license = "",   #TODO Select a GPL-compatible license
-    classifiers = [],   #TODO Select classifiers from list on PyPI
+    license = "",   #TODO(PM) Select a GPL-compatible license
+    classifiers = [],   #TODO(PM) Select classifiers from list on PyPI
     install_requires = ["re","json","urllib2","wikitools"],
     packages = ["genutiv"],
 )

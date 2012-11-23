@@ -7,11 +7,10 @@
 #   Create a data structure with nouns matched to patterns and assess whether
 #   pattern could accurately guess gender of each matched noun.
 #
-#   TODO:
-#   - There are numerous data structures in this script. Is it better to
+#   TODO(PM) There are numerous data structures in this script. Is it better to
 #     build them like pattern_dict or reverse_pattern_dict? And then under
 #     what circumstances?
-#   - Can I factor out the for loops into a more generic function?
+#   TODO(PM) Can I factor out the for loops into a more generic function?
 #
 
 import json

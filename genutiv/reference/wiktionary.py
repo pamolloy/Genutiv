@@ -6,12 +6,11 @@
 #   Wiktionary. Filter certain results and store the them in `dirty.json'.
 #   All other nouns are stored in temporary `clean.json'.
 #
-#   TODO:
-#   - Output information
-#   - Store removed data
-#   - Error checking and handling
-#   - Store category in Noun object
-#   - extract_gender() is painfully slow
+#   TODO(PM) Output information
+#   TODO(PM) Store removed data
+#   TODO(PM) Error checking and handling
+#   TODO(PM) Store category in Noun object
+#   TODO(PM) extract_gender() is painfully slow
 #
 
 import re
@@ -53,7 +52,7 @@ class Wiktionary(Reference):
 
         base = set()
 
-        #TODO Check/create `json' directory
+        #TODO(PM) Check/create `json' directory
 
         for category in self.category_dict['base']:
             base |= self.fetch(category)

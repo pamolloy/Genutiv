@@ -3,8 +3,7 @@
 #
 #   reference.py
 #
-#   TODO
-#   - Duck typing instead of testing for the type of arguments
+#   TODO(PM) Duck typing instead of testing for the type of arguments
 
 from datetime import datetime
 import wikitools

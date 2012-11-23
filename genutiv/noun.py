@@ -12,7 +12,7 @@ class Noun(object):
     def __init__(self, noun):
         self.noun = noun
         self.created = datetime.now()
-        self.modified = self.created #TODO Does this assign value?
+        self.modified = self.created
         self.gender = ''
         self.sourceName = ''
         self.sourceAddr = ''
