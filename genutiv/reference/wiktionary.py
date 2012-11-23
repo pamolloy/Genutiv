@@ -1,5 +1,3 @@
-#!/usr/bin/python2.7
-# -*- coding: utf-8 -*-
 #
 #   wiktionary.py
 #
@@ -31,8 +29,8 @@ class Wiktionary(Reference):
 
     def __init__(self):
         Reference.__init__(self, 'German Wiktionary',
-        'http://de.wiktionary.org/w/api.php')
-
+        'http://de.wiktionary.org/w/api.php', 'wiktionary.pickle')
+        
         # Open dictionary of noun categories
         with open('reference/kategorien.json', 'r') as store:
             self.category_dict = json.load(store)
@@ -41,10 +39,13 @@ class Wiktionary(Reference):
         """Create Noun objects from source and store them"""
 
         noun_set = self.lookup_nouns()
+
         for word in noun_set:
             noun = Noun(word)
             gender = self.lookup_gender(word)
             noun.setGender(gender)
+            noun.setSourceName(self.title)
+            noun.setSourceAddr(self.url)
             self.addNoun(noun)
 
     def lookup_nouns(self):

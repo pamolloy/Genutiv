@@ -10,6 +10,7 @@
 from reference.wiktionary import Wiktionary
 
 if __name__ == '__main__':
+    container = set()
     wiki = Wiktionary()
     wiki.populate()
 

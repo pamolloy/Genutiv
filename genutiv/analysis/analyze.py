@@ -43,8 +43,6 @@ def list_patterns(gender):
             print pattern[1:] + '-'
         else: pass
 
-
-
 def results():
     """Create a dictionary containing results of accuracy test."""
     
