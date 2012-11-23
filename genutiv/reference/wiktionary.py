@@ -29,6 +29,7 @@ class Wiktionary(Reference):
     def __init__(self):
         Reference.__init__(self, 'German Wiktionary',
         'http://de.wiktionary.org/w/api.php', 'wiktionary.pickle')
+        #TODO(PM) Add a text interface to login
         
         # Open dictionary of noun categories
         with open('reference/kategorien.json', 'r') as store:
@@ -121,6 +122,7 @@ class Wiktionary(Reference):
         user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.30\
          Chrome/12.0.742.112 Safari/534.30'
        
+        #TODO(PM) Only loading necessary data from page
         request = urllib2.Request(url.encode('utf-8'),
             headers = { 'User-Agent' : user_agent })
         raw_html = urllib2.urlopen(request)
