@@ -11,6 +11,7 @@ class Noun(object):
     def __init__(self, noun):
         self.noun = noun
         self.created = datetime.now()
+        self.updated = self.created
         self.modified = self.created
         self.gender = ''
         self.sourceName = ''
