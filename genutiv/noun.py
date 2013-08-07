@@ -12,7 +12,6 @@ class Noun(object):
         self.noun = noun
         self.created = datetime.now()
         self.updated = self.created
-        self.modified = self.created
         self.gender = ''
         self.sourceName = ''
         self.sourceAddr = ''
